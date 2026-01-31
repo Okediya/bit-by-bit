@@ -79,6 +79,8 @@ class AIProvider {
         return ['claude-3-5-sonnet-20241022', 'claude-3-opus-20240229', 'claude-3-haiku-20240307'];
       case AIProviderType.groq:
         return ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768', 'gemma2-9b-it'];
+      case AIProviderType.xai:
+        return ['grok-2-latest'];
       case AIProviderType.ollama:
         return ['llama3.2', 'llama3.1', 'mistral', 'codellama', 'mixtral'];
       case AIProviderType.custom:
@@ -97,6 +99,8 @@ class AIProvider {
         return 'https://api.anthropic.com/v1';
       case AIProviderType.groq:
         return 'https://api.groq.com/openai/v1';
+      case AIProviderType.xai:
+        return 'https://api.x.ai/v1';
       case AIProviderType.ollama:
         return 'http://localhost:11434';
       case AIProviderType.custom:
@@ -110,6 +114,7 @@ enum AIProviderType {
   gemini,
   claude,
   groq,
+  xai,
   ollama,
   custom,
 }
@@ -125,6 +130,8 @@ extension AIProviderTypeExtension on AIProviderType {
         return 'Anthropic Claude';
       case AIProviderType.groq:
         return 'Groq';
+      case AIProviderType.xai:
+        return 'xAI (Grok)';
       case AIProviderType.ollama:
         return 'Ollama (Local)';
       case AIProviderType.custom:
@@ -142,6 +149,8 @@ extension AIProviderTypeExtension on AIProviderType {
         return 'Anthropic\'s Claude models';
       case AIProviderType.groq:
         return 'Fast inference with LLaMA & Mixtral';
+      case AIProviderType.xai:
+        return 'Grok models by xAI';
       case AIProviderType.ollama:
         return 'Run models locally with Ollama';
       case AIProviderType.custom:

@@ -88,7 +88,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                 spacing: 10,
                 runSpacing: 10,
                 children: [
-                  for (final type in [AIProviderType.gemini, AIProviderType.groq, AIProviderType.openai, AIProviderType.claude])
+                  for (final type in [AIProviderType.gemini, AIProviderType.groq, AIProviderType.openai, AIProviderType.claude, AIProviderType.xai])
                     _ProviderChip(
                       type: type,
                       isSelected: _selectedType == type,
@@ -224,6 +224,8 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
         return 'Get your key at platform.openai.com';
       case AIProviderType.claude:
         return 'Get your key at console.anthropic.com';
+      case AIProviderType.xai:
+        return 'Get your key at console.x.ai';
       default:
         return '';
     }

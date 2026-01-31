@@ -11,12 +11,14 @@ A minimalist, powerful AI chat application built with Flutter. Bit by Bit helps 
   - Groq (Llama, Mixtral)
   - OpenAI (GPT-4)
   - Anthropic (Claude)
+  - xAI (Grok)
 - **Minimalist Design:** A distraction-free, black-and-white aesthetic designed for focus.
 - **Local Data:** All your chats and API keys are stored locally on your device.
 
 ## 📱 Screenshots
 
-<!-- Add your screenshots here -->
+![App Demo](screenshots/demo.png)
+
 
 ## 🛠️ Getting Started
 

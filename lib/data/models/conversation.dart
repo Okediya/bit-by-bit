@@ -1,4 +1,4 @@
-/// Conversation and ChatMessage models for AI chat
+// Conversation and ChatMessage models for AI chat
 
 /// Represents a text highlight linking to a sub-conversation
 class TextHighlight {

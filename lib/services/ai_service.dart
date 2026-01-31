@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import '../data/models/ai_provider.dart';
@@ -32,7 +33,7 @@ Future<http.Response> _postWithRetry(
       
       // Exponential backoff: 1s, 2s, 4s...
       final delay = Duration(seconds: pow(2, attempts - 1).toInt());
-      print('API Error ${response.statusCode}. Retrying in ${delay.inSeconds}s...');
+      debugPrint('API Error ${response.statusCode}. Retrying in ${delay.inSeconds}s...');
       await Future.delayed(delay);
     } catch (e) {
       attempts++;
@@ -55,6 +56,8 @@ class AIServiceFactory {
         return ClaudeService(provider);
       case AIProviderType.groq:
         return GroqService(provider);
+      case AIProviderType.xai:
+        return XAIService(provider);
       case AIProviderType.ollama:
         return OllamaService(provider);
       case AIProviderType.custom:
@@ -237,6 +240,46 @@ class GroqService implements AIService {
   @override
   Future<String> complete(String prompt, {String? systemPrompt}) async {
     final baseUrl = provider.baseUrl ?? 'https://api.groq.com/openai/v1';
+    final response = await _postWithRetry(
+      Uri.parse('$baseUrl/chat/completions'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${provider.apiKey}',
+      },
+      body: jsonEncode({
+        'model': provider.model,
+        'messages': [
+          if (systemPrompt != null) {'role': 'system', 'content': systemPrompt},
+          {'role': 'user', 'content': prompt},
+        ],
+        'temperature': 0.7,
+      }),
+    );
+    
+    if (response.statusCode != 200) {
+      throw Exception('API error: ${response.statusCode} - ${response.body}');
+    }
+    
+    final data = jsonDecode(response.body);
+    return data['choices'][0]['message']['content'];
+  }
+  
+  @override
+  Future<Stream<String>> streamComplete(String prompt, {String? systemPrompt}) async {
+    final result = await complete(prompt, systemPrompt: systemPrompt);
+    return Stream.value(result);
+  }
+}
+
+/// xAI (Grok) API implementation (OpenAI-compatible)
+class XAIService implements AIService {
+  final AIProvider provider;
+  
+  XAIService(this.provider);
+  
+  @override
+  Future<String> complete(String prompt, {String? systemPrompt}) async {
+    final baseUrl = provider.baseUrl ?? 'https://api.x.ai/v1';
     final response = await _postWithRetry(
       Uri.parse('$baseUrl/chat/completions'),
       headers: {

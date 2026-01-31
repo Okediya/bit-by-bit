@@ -126,14 +126,25 @@ class _ProviderFormModalState extends State<ProviderFormModal> {
               ],
               
               const SizedBox(height: 16),
-              TextField(controller: _baseUrlController, decoration: const InputDecoration(labelText: 'Base URL (optional)')),
-              const SizedBox(height: 24),
+              
+              // Only show Base URL for custom/local providers
+              if (_selectedType == AIProviderType.ollama || _selectedType == AIProviderType.custom) ...[
+                TextField(
+                  controller: _baseUrlController, 
+                  decoration: const InputDecoration(
+                    labelText: 'Base URL', 
+                    hintText: 'e.g. http://localhost:11434'
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _save,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),

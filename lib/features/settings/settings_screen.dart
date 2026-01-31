@@ -184,6 +184,7 @@ class SettingsScreen extends ConsumerWidget {
           await repo.saveProvider(provider);
           ref.invalidate(aiProvidersProvider);
           ref.invalidate(activeAIProviderProvider);
+          if (!context.mounted) return;
           Navigator.pop(context);
         },
       ),
